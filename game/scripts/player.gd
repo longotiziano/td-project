@@ -23,6 +23,7 @@ func _physics_process(delta):# se ejecuta a frecuencia fija, 60 veces por segund
 	var current_speed = run_speed if Input.is_action_pressed("run") else speed
 
 	if raw.length() > 0.1:
+		print("Moviendo: ", raw)
 		raw = raw.normalized()
 		var dir = (ISO_RIGHT * raw.x + ISO_FORWARD * raw.y)
 		velocity.x = dir.x * current_speed
