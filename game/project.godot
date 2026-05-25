@@ -13,6 +13,10 @@ config_version=5
 run/main_scene="uid://cf4josvlj3d2h"
 config/features=PackedStringArray("4.6")
 
+[display]
+
+window/stretch/mode="viewport"
+
 [input]
 
 ui_left={

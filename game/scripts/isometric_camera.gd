@@ -3,9 +3,12 @@ extends Camera3D
 var target: Node3D
 
 func _ready():
-	position = Vector3(-15, 20, -15)
-	look_at(Vector3.ZERO, Vector3.UP)
-	target = get_node("/root/Node3D/Player")
+	await get_tree().process_frame
+	target = get_node("../Player")
+	if target:
+		print("✅ Cámara encontró al Player!")
+	else:
+		print("⚠️ No encontró al Player!")
 
 func _process(_delta):
 	if target:
