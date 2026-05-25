@@ -10,7 +10,13 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0wfyh"]
 albedo_color = Color(9.62615e-08, 0.71284145, 0.70712936, 1)
 
+[sub_resource type="Environment" id="Environment_0wfyh"]
+ambient_light_color = Color(0.34565455, 0.41897678, 0.5430203, 1)
+
 [sub_resource type="HeightMapShape3D" id="HeightMapShape3D_sugp2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sugp2"]
+albedo_color = Color(0.46289068, 0.44717252, 0.21996474, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_jyhfs"]
 
@@ -22,7 +28,7 @@ current = true
 script = ExtResource("1_o5qli")
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=607388624]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4570675, 0)
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 1.4570675, 0)
 script = ExtResource("2_0wfyh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=517250033]
@@ -34,12 +40,32 @@ surface_material_override/0 = SubResource("StandardMaterial3D_0wfyh")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Player" unique_id=1642479255]
 
-[node name="Floor" type="StaticBody3D" parent="." unique_id=878947965]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1489887029]
+transform = Transform3D(0.7071067, 0.5930296, -0.3851179, 0, 0.54463893, 0.83867055, 0.7071067, -0.5930296, 0.3851179, 2.5962958, 13.009415, 2.5962958)
+light_energy = 1.5
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 4.587
+shadow_transmittance_bias = -6.58
+shadow_opacity = 0.41
+shadow_blur = 0.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=1793900638]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=894133854]
+environment = SubResource("Environment_0wfyh")
+
+[node name="Map" type="Node3D" parent="." unique_id=449746715]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Map" unique_id=83037509]
+transform = Transform3D(11.134385, 0, 0, 0, 0.34194466, 0, 0, 0, 1, -0.36425966, 0, 0.036315918)
+size = Vector3(1.0654297, 1, 140.04602)
+
+[node name="Floor" type="StaticBody3D" parent="Map" unique_id=878947965]
+transform = Transform3D(70, 0, 0, 0, 70, 0, 0, 0, 70, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Floor" unique_id=1793900638]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 shape = SubResource("HeightMapShape3D_sugp2")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=2079671665]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map/Floor" unique_id=2079671665]
+material_override = SubResource("StandardMaterial3D_sugp2")
 mesh = SubResource("PlaneMesh_jyhfs")
