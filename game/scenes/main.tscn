@@ -1,8 +1,15 @@
 [gd_scene format=3 uid="uid://cf4josvlj3d2h"]
 
+[ext_resource type="Shader" uid="uid://bnwlcucfnff3q" path="res://scenes/main.gdshader" id="1_jyhfs"]
 [ext_resource type="Script" uid="uid://bu5xi3rkqq00r" path="res://scripts/isometric_camera.gd" id="1_o5qli"]
-[ext_resource type="PackedScene" uid="uid://cxa3sqvykgcp8" path="res://scenes/player.tscn" id="2_sugp2"]
-[ext_resource type="PackedScene" uid="uid://cjwxty7c1yi5b" path="res://scenes/zombie.tscn" id="3_sugp2"]
+[ext_resource type="Script" uid="uid://dcnfsed2ggg6" path="res://scripts/main.gd" id="1_tbgi4"]
+[ext_resource type="Script" uid="uid://bjwy33mk6blqi" path="res://scripts/player.gd" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://djp3qauctwhiu" path="res://scenes/zombie.tscn" id="3_sugp2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sugp2"]
+shader = ExtResource("1_jyhfs")
+shader_parameter/color_depth = 8
+shader_parameter/dither_strength = 0.3
 
 [sub_resource type="Environment" id="Environment_0wfyh"]
 ambient_light_color = Color(0.34565455, 0.41897678, 0.5430203, 1)
@@ -22,26 +29,32 @@ albedo_color = Color(0.46289068, 0.44717252, 0.21996474, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_jyhfs"]
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_0wfyh"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sugp2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0wfyh"]
+albedo_color = Color(9.62615e-08, 0.71284145, 0.70712936, 1)
+
 [node name="Node3D" type="Node3D" unique_id=5073452]
+script = ExtResource("1_tbgi4")
 
-[node name="IsometricCamera" type="Camera3D" parent="." unique_id=718557430]
-physics_interpolation_mode = 1
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 1.4570675, 0)
-current = true
-script = ExtResource("1_o5qli")
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1510102427]
+material = SubResource("ShaderMaterial_sugp2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
 
-[node name="Player" parent="." unique_id=1134877450 instance=ExtResource("2_sugp2")]
-transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 1.4570675, 0)
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1489887029]
-transform = Transform3D(0.7071067, 0.5930296, -0.3851179, 0, 0.54463893, 0.83867055, 0.7071067, -0.5930296, 0.3851179, 2.5962958, 13.009415, 2.5962958)
-light_energy = 1.5
-shadow_enabled = true
-shadow_bias = 0.0
-shadow_normal_bias = 4.587
-shadow_transmittance_bias = -6.58
-shadow_opacity = 0.41
-shadow_blur = 0.0
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=827237716]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1152, 648)
+size_2d_override = Vector2i(320, 180)
+size_2d_override_stretch = true
+render_target_update_mode = 4
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=894133854]
 environment = SubResource("Environment_0wfyh")
@@ -70,6 +83,33 @@ shape = SubResource("HeightMapShape3D_sugp2")
 material_override = SubResource("StandardMaterial3D_sugp2")
 mesh = SubResource("PlaneMesh_jyhfs")
 
+[node name="Player" type="CharacterBody3D" parent="." unique_id=607388624]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 1.4570675, 0)
+script = ExtResource("2_0wfyh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=517250033]
+shape = SubResource("CylinderShape3D_0wfyh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=2011123325]
+mesh = SubResource("CylinderMesh_sugp2")
+surface_material_override/0 = SubResource("StandardMaterial3D_0wfyh")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player" unique_id=1642479255]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1489887029]
+transform = Transform3D(0.7071068, 0.5930297, -0.38511792, 0, 0.544639, 0.8386706, 0.7071068, -0.5930297, 0.38511792, 2.5962958, 13.009415, 2.5962958)
+light_energy = 1.5
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 4.587
+shadow_transmittance_bias = -6.58
+shadow_opacity = 0.41
+shadow_blur = 0.0
+
 [node name="Zombie" parent="." unique_id=1347175020 instance=ExtResource("3_sugp2")]
-transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -0.045205116, 1.6124945, 5.2515144)
-target_path = NodePath("../Map/House")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.045205116, 1.6124945, 5.2515144)
+
+[node name="IsometricCamera" type="Camera3D" parent="." unique_id=718557430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1744988, 1.889361)
+current = true
+script = ExtResource("1_o5qli")
