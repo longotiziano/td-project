@@ -18,6 +18,7 @@ func _physics_process(delta):
 	)
 
 	if raw.length() > 0.1:
+		print("Moviendo: ", raw)
 		raw = raw.normalized()
 		var dir = (ISO_RIGHT * raw.x + ISO_FORWARD * raw.y)
 		velocity.x = dir.x * speed
